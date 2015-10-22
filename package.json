@@ -35,6 +35,6 @@
     "mocha": "2.3.3"
   },
   "dependencies": {
-    "axios": "0.7.0"
+    "axios": "0.5.4"
   }
 }
