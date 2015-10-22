@@ -1,0 +1,38 @@
+{
+  "name": "redux-axios-api-middleware",
+  "version": "0.0.1",
+  "description": "redux middleware using axios making api calls with redux easy",
+  "main": "dist/index.js",
+  "scripts": {
+    "prebuild": "rm -rf dist && mkdir dist",
+    "build": "babel src --out-dir dist",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mikeyamadeo/redux-axios-api-middleware.git"
+  },
+  "keywords": [
+    "redux",
+    "middleware",
+    "api"
+  ],
+  "author": "Mikey Murphy <mikeyamadeo@gmail.com> (https://twitter.com/TranscendMikey)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mikeyamadeo/redux-axios-api-middleware/issues"
+  },
+  "homepage": "https://github.com/mikeyamadeo/redux-axios-api-middleware#readme",
+  "standard": {
+    "parser": "babel-eslint",
+    "rules": {
+      "strict": 0
+    }
+  },
+  "devDependencies": {
+    "babel": "5.8.23"
+  },
+  "dependencies": {
+    "axios": "0.7.0"
+  }
+}
