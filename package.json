@@ -1,6 +1,6 @@
 {
   "name": "redux-axios-api-middleware",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "redux middleware using axios making api calls with redux easy",
   "main": "dist/index.js",
   "scripts": {
