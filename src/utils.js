@@ -82,7 +82,7 @@ export function applySchema (schema, response) {
   const transformation = { entities, result }
 
   return key
-    ? Object.assign({}, response, transformation)
+    ? { ...response, ...transformation }
     : transformation
 }
 

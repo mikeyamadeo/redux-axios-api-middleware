@@ -33,7 +33,7 @@ export function configureApiMiddleware (CALL_API, API_ROOT, interceptors) {
     }
 
     _checkCallApi(callAPI)
-    const config = composeConfig(Object.assign({}, callAPI, {apiRoot: API_ROOT}))
+    const config = composeConfig({ ...callAPI, apiRoot: API_ROOT })
 
     const { schema, types, payload, meta, bailout } = callAPI
 
@@ -42,7 +42,7 @@ export function configureApiMiddleware (CALL_API, API_ROOT, interceptors) {
     }
 
     function actionWith (data) {
-      const finalAction = Object.assign({}, action, data)
+      const finalAction = { ...action, ...data }
       delete finalAction[CALL_API]
       return finalAction
     }
