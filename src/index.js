@@ -56,7 +56,7 @@ export function configureApiMiddleware (CALL_API, API_ROOT, interceptors) {
         type: successType
       })),
       error => {
-        return next(actionWith({type: failureType, error: error.message || 'Something bad happened'}))
+        return next(actionWith({type: failureType, error: error.message || 'Something bad happened', meta}))
       }
     )
   }
