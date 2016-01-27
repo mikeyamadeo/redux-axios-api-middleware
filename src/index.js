@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Promise } from 'axios/node_modules/es6-promise'
+import Promise from 'bluebird'
 import { composeConfig, applySchema, maybeParse } from './utils'
 
 let _interceptorsAreSet = false
