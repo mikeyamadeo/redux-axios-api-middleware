@@ -7,6 +7,7 @@
     "dist"
   ],
   "scripts": {
+    "prepublish": "npm run build",
     "prebuild": "rm -rf dist && mkdir dist",
     "build": "babel src --out-dir dist/",
     "test": "mocha src/utils.spec.js -w --compilers js:babel/register"
