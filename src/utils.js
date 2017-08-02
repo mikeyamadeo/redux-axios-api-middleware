@@ -2,12 +2,17 @@ const DEFAULT_METHOD = `GET`
 
 export function composeConfig (callAPI) {
   let {
-    apiRoot, url, endpoint, method, headers,
-    transformResponse, params, data
+    apiRoot,
+    url,
+    endpoint,
+    method,
+    headers,
+    transformResponse,
+    params,
+    data
   } = callAPI
 
   if (!url) {
-
     if (!endpoint || typeof endpoint !== 'string') {
       throw new Error('Specify a string endpoint URL.')
     }
@@ -19,10 +24,7 @@ export function composeConfig (callAPI) {
     method = DEFAULT_METHOD
   }
 
-  return {
-    url, method, headers,
-    transformResponse, params, data
-  }
+  return { url, method, headers, transformResponse, params, data }
 }
 
 /**
@@ -54,36 +56,37 @@ export function composeConfig (callAPI) {
 export function applySchema (schema, response) {
   if (!schema) return response
   const { key, name, id } = schema
+  const entityTransform = schema.entityTransform
+    ? schema.entityTransform
+    : data => data
 
   if (key && !response[key]) {
-    throw new Error(`key of '${key}' provided in schema, but no property with value of '${key}' found in response.`)
+    throw new Error(
+      `key of '${key}' provided in schema, but no property with value of '${key}' found in response.`
+    )
   }
 
-  let data = key
-    ? response[key] /* [1] */
-    : response /* [2] */
+  let data = key ? response[key] /* [1] */ : response
 
+  /* [2] */
   if (data.constructor !== Array) {
-    data = [data] /* [3] */
+    data = [ data ] /* [3] */
   }
 
-  const entities = {
-    [schema.name]: {}
-  }
+  const entities = { [schema.name]: {} }
 
   let result = []
 
   data.forEach((item, i) => {
-    let _id = data[i][id]
-    entities[name][_id] = data[i]
+    const entity = entityTransform(item)
+    let _id = entity[id]
+    entities[name][_id] = entity
     result.push(_id)
   })
 
   const transformation = { entities, result }
 
-  return key
-    ? { ...response, ...transformation }
-    : transformation
+  return key ? { ...response, ...transformation } : transformation
 }
 
 export function maybeParse (data) {

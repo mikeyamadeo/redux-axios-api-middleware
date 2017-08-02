@@ -4,13 +4,12 @@ import { composeConfig, applySchema, maybeParse } from './utils'
 
 let _interceptorsAreSet = false
 
-function useInterceptors (getState, {requests = [], responses = []} = {}) {
-
-  requests.forEach((fn) => {
+function useInterceptors (getState, { requests = [], responses = [] } = {}) {
+  requests.forEach(fn => {
     axios.interceptors.request.use(fn.bind(null, getState))
   })
 
-  responses.forEach((fn) => {
+  responses.forEach(fn => {
     axios.interceptors.response.use(fn.bind(null, getState))
   })
 
@@ -22,10 +21,10 @@ function useInterceptors (getState, {requests = [], responses = []} = {}) {
  * Performs the call and promises when such actions are dispatched.
  */
 export function configureApiMiddleware (CALL_API, API_ROOT, interceptors) {
-
   return store => next => action => {
-
-    if (interceptors && !_interceptorsAreSet) useInterceptors(store.getState, interceptors)
+    if (interceptors && !_interceptorsAreSet) {
+      useInterceptors(store.getState, interceptors)
+    }
 
     const callAPI = action[CALL_API]
     if (typeof callAPI === 'undefined') {
@@ -47,18 +46,22 @@ export function configureApiMiddleware (CALL_API, API_ROOT, interceptors) {
       return finalAction
     }
 
-    const [requestType, successType, failureType] = types
+    const [ requestType, successType, failureType ] = types
     next(actionWith({ type: requestType, payload, meta }))
 
-    return callApi(config, schema).then(payload => next(actionWith({
-        payload,
-        meta,
-        type: successType
-      })),
-      error => {
-        return next(actionWith({type: failureType, error: error.message || 'Something bad happened', meta, payload}))
-      }
-    )
+    return callApi(
+      config,
+      schema
+    ).then(payload => next(actionWith({ payload, meta, type: successType })), error => {
+      return next(
+        actionWith({
+          type: failureType,
+          error: error.message || 'Something bad happened',
+          meta,
+          payload
+        })
+      )
+    })
   }
 }
 
@@ -82,15 +85,12 @@ function _checkCallApi (callAPI) {
  */
 function callApi (config, schema) {
   return axios(config)
-
     .then(response => ({
       apiResponse: response,
       ...applySchema(schema, maybeParse(response.data))
     }))
-
     .catch(err => {
       console.warn(err)
       return Promise.reject(err)
     })
 }
-
