@@ -24,6 +24,10 @@ export function composeConfig (callAPI) {
     method = DEFAULT_METHOD
   }
 
+  if (!headers) {
+    headers = { 'Content-Type': 'application/json' }
+  }
+
   return { url, method, headers, transformResponse, params, data }
 }
 
