@@ -47,23 +47,27 @@ export function configureApiMiddleware (CALL_API, API_ROOT, interceptors) {
     }
 
     const [ requestType, successType, failureType ] = types
-    next(actionWith({ type: requestType, payload, meta }))
+    next(
+      actionWith({ type: requestType, payload, meta: determineMeta(meta, 0) })
+    )
 
     return callApi(
       config,
       schema
-    ).then(payload => next(actionWith({ payload, meta, type: successType })), error => {
+    ).then(payload => next(actionWith({ payload, meta: determineMeta(meta, 1), type: successType })), error => {
       return next(
         actionWith({
           type: failureType,
           error: error.message || 'Something bad happened',
-          meta,
+          meta: determineMeta(meta, 2),
           payload
         })
       )
     })
   }
 }
+
+const determineMeta = (meta, stage) => Array.isArray(meta) ? meta[stage] : meta
 
 function _checkCallApi (callAPI) {
   const { types, bailout } = callAPI
